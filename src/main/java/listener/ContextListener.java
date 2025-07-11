@@ -21,11 +21,13 @@ public class ContextListener implements ServletContextListener {
         File file = new File("D:\\JavaPrograms\\RegistrationApps\\src\\main\\resources\\users.json");
 
         UserDao userDao = new UserDao(objectMapper,file);
-        UserService userService = new UserService(userDao);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+        UserService userService = new UserService(userDao, passwordEncoder);
+
+
         servletContext.setAttribute("userService", userService);
-        servletContext.setAttribute("passwordEncoder", passwordEncoder);
+//        servletContext.setAttribute("passwordEncoder", passwordEncoder);
 
     }
 }

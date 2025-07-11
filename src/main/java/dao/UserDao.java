@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -17,10 +18,17 @@ public class UserDao {
 
     @SneakyThrows
     public void save(User user) {
-        List<User> list = objectMapper.readValue(file, new TypeReference<List<User>>() {
-        });
+        List<User> list = findAll();
 
         list.add(user);
         objectMapper.writeValue(file, list);
     }
+
+    @SneakyThrows
+    public List<User> findAll() {
+        return objectMapper.readValue(file, new TypeReference<List<User>>() {
+        });
+    }
+
+
 }
