@@ -7,7 +7,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import service.UserService;
 
 import java.io.IOException;
@@ -17,13 +16,11 @@ import java.util.Optional;
 public class LoginServlet extends HttpServlet {
 
     private UserService userService;
-//    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         userService = (UserService) config.getServletContext().getAttribute("userService");
-//        passwordEncoder = (BCryptPasswordEncoder) config.getServletContext().getAttribute("passwordEncoder");
     }
 
 
@@ -39,10 +36,10 @@ public class LoginServlet extends HttpServlet {
 
         Optional<User> optionalUser = userService.findUserByCredentials(login, password);
         if (optionalUser.isPresent()) {
-            req.getRequestDispatcher("/index.html").forward(req, resp);
+            req.getSession().setAttribute("user", optionalUser.get());
+            req.getRequestDispatcher("/secure/products.jsp").forward(req, resp);
         } else {
-            //resp.sendRedirect(req.getContextPath() + "/login"); OR
-            req.getRequestDispatcher("/login.html").forward(req, resp);
+            resp.sendRedirect("/login");
         }
 
     }

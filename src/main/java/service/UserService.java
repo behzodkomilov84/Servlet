@@ -15,9 +15,6 @@ public class UserService {
     private final UserDao userDao;
     private final BCryptPasswordEncoder passwordEncoder;
 
-
-    //UserDao userDao = new UserDao();
-
     public void save(String login, String password) {
         String encodedPassword = passwordEncoder.encode(password);
 
