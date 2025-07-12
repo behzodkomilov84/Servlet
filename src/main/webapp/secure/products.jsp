@@ -18,11 +18,11 @@
             <h4>Product<span>Dashboard</span></h4>
             <h5>Products</h5>
             <label>
-                Name: <input type="text" name="product-name" placeholder="product name" autocomplete="off">
+                Name: <input type="text" name="product-name" placeholder="product name" autocomplete="off" required>
             </label>
             <i class="typcn typcn-eye" id="eye"></i>
             <label>
-                ImageUrl: <input type="text" name="image-url" placeholder="image-url" autocomplete="off">
+                ImageUrl: <input type="text" name="image-url" placeholder="image-url" autocomplete="off" required>
             </label>
 
             <button type="submit">Add product</button>
@@ -32,8 +32,20 @@
 </div>
 
 <c:forEach var="product" items="${products}">
+    <!--- product qo'shish imkoniyati bu yerdan boshlanadi --->
     <p>${product.name}</p>
     <img src="${product.imageUrl}">
+    <!--- product qo'shish imkoniyati bu yerda tugaydi --->
+
+    <!--- product o'chirish imkoniyati bu yerda boshlanadi --->
+    <form action="/secure/products" method="post">
+        <input type="hidden" name="_method" value="DELETE"/>
+        <input type="hidden" name="product-id" value="${product.id}"/>
+        <button type="submit" name="remove-button" style="color: red">Remove</button>
+    </form>
+
+    <!--- product o'chirish imkoniyati bu yerda tugaydi --->
+
 </c:forEach>
 
 </body>
