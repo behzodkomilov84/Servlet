@@ -31,6 +31,12 @@
     </div>
 </div>
 
+<div>
+<c:forEach var="login" items="${userLogins}">
+    <p> ${login}</p>
+</c:forEach>
+</div>
+
 <c:forEach var="product" items="${products}">
     <!--- product qo'shish imkoniyati bu yerdan boshlanadi --->
     <p>${product.name}</p>

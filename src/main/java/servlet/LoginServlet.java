@@ -11,19 +11,18 @@ import jakarta.servlet.http.HttpServletResponse;
 import service.UserService;
 
 import java.io.IOException;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static servlet.ProductsServlet.onlineUsersSet;
+
 @WebServlet(urlPatterns = "/login")
 public class LoginServlet extends HttpServlet {
 
-    private UserService userService;
     private final Map<String, LoginAttempt> loginAttempts = new ConcurrentHashMap<>();
+    private UserService userService;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -46,7 +45,7 @@ public class LoginServlet extends HttpServlet {
         loginAttempts.putIfAbsent(sessionId, new LoginAttempt());
         LoginAttempt attempt = loginAttempts.get(sessionId);
 
-        if (attempt.isBlockedExpired()){
+        if (attempt.isBlockedExpired()) {
             attempt.setCountOfAttempts(new AtomicInteger(0));
         }
 
@@ -58,8 +57,10 @@ public class LoginServlet extends HttpServlet {
         Optional<User> optionalUser = userService.findUserByCredentials(login, password);
 
         if (optionalUser.isPresent()) {
-            req.getSession().setAttribute("user", optionalUser.get());
-            req.getRequestDispatcher("/secure/products.jsp").forward(req, resp);
+            User user = optionalUser.get();
+            req.getSession().setAttribute("user", user);
+            onlineUsersSet.add(user.getLogin());
+            resp.sendRedirect("/secure/products");
         } else {
             attempt.incrementCountOfAttempts();
             resp.sendRedirect("/login");
