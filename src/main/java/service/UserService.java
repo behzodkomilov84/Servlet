@@ -29,8 +29,16 @@ public class UserService {
     public Optional<User> findUserByCredentials(String login, String password) {
         List<User> users = userDao.findAll();
 
-       return users.stream()
-                .filter(user -> user.getLogin().equals(login) && passwordEncoder.matches(password, user.getPassword()))
+        return users.stream()
+                .filter(user -> user.getLogin().equals(login))
+                .filter(user -> passwordEncoder.matches(password, user.getPassword()))
                 .findFirst();
+    }
+
+    public boolean isExist(String login) {
+        long count = userDao.findAll().stream()
+                .filter(user -> user.getLogin().equals(login))
+                .count();
+        return count != 0;
     }
 }

@@ -12,9 +12,7 @@ public class ProductService {
 
     private final ProductDao productDao;
 
-    public void save(Product product) {
-        productDao.save(product);
-    }
+    public void save(Product product) {productDao.save(product);}
 
     public List<Product> findAllByUserId(UUID userId) {
         return productDao.findAll().stream()
@@ -23,9 +21,11 @@ public class ProductService {
 
     }
 
-    public void removeById(UUID productId){
+    public void removeById(UUID productId) {
         List<Product> products = productDao.findAll();
-        List<Product> productsWithoutDeletedElement = products.stream().filter(product -> !product.getId().equals(productId)).toList();
+        List<Product> productsWithoutDeletedElement = products.stream()
+                .filter(product -> !product.getId().equals(productId))
+                .toList();
         productDao.saveAll(productsWithoutDeletedElement);
     }
 }

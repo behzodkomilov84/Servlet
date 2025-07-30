@@ -8,8 +8,10 @@ import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import service.AuthenticationService;
 import service.ProductService;
 import service.UserService;
+import util.CredentialsExtractor;
 
 import java.io.File;
 @WebListener
@@ -30,9 +32,11 @@ public class ContextListener implements ServletContextListener {
 
         UserService userService = new UserService(userDao, passwordEncoder);
         ProductService productService = new ProductService(productDao);
+        CredentialsExtractor credentialsExtractor = new CredentialsExtractor();
+        AuthenticationService authenticationService = new AuthenticationService(userService, credentialsExtractor);
 
 
-        servletContext.setAttribute("userService", userService);
+        servletContext.setAttribute("authenticationService", authenticationService);
         servletContext.setAttribute("productService", productService);
 
     }

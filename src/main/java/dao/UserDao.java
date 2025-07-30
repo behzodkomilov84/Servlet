@@ -3,32 +3,13 @@ package dao;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import entity.User;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
-@RequiredArgsConstructor
-public class UserDao {
+public class UserDao extends BaseDao<User> {
 
-    private final ObjectMapper objectMapper;
-    private final File file;
-
-    @SneakyThrows
-    public void save(User user) {
-        List<User> list = findAll();
-
-        list.add(user);
-        objectMapper.writeValue(file, list);
+    public UserDao(ObjectMapper objectMapper, File file) {
+        super(objectMapper, file, new TypeReference<List<User>>() {});
     }
-
-    @SneakyThrows
-    public List<User> findAll() {
-        return objectMapper.readValue(file, new TypeReference<List<User>>() {
-        });
-    }
-
-
 }
